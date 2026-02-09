@@ -4,17 +4,33 @@ require 'forwardable'
 
 module Lowkey
   class ClassProxy
-    extend Forwardable
+    attr_reader :class_name, :file_proxy, :start_line, :end_line
+    attr_accessor :private_start_line, :class_methods, :instance_methods, :method_calls
 
-    attr_reader :name, :klass, :file, :private_start_line
+    def initialize(node:, file_proxy:)
+      @class_name = node.name
+      @file_proxy = file_proxy
 
-    def_delegators :@file, :start_line, :end_line, :lines?
+      @start_line = node.class_keyword_loc.start_line
+      @end_line = node.end_keyword_loc.end_line # class_keyword_loc ?
+      @private_start_line = nil
 
-    def initialize(klass:, file:, private_start_line:)
-      @name = klass.to_s
-      @klass = klass
-      @file = file
-      @private_start_line = private_start_line
+      @class_methods = {}
+      @instance_methods = {}
+      @method_calls = []
+    end
+
+    private
+
+    def class_method?(node)
+      return true if node.is_a?(::Prism::DefNode) && node.receiver.instance_of?(Prism::SelfNode) # self.method_name
+      return true if node.is_a?(::Prism::SingletonClassNode) # class << self
+
+      if (parent_node = parent_map.parent(node:))
+        return class_method?(parent_node)
+      end
+
+      false
     end
   end
 end
