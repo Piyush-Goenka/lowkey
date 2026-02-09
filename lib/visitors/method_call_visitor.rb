@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
-module Lowkey
-  class MethodCallVisitor < Prism::Visitor
-    attr_reader :method_calls
+class MethodCallVisitor
+  def initialize(file_proxy:)
+    @file_proxy = file_proxy
+  end
 
-    def initialize(parent_map:, method_names:)
-      @parent_map = parent_map
-      @method_names = method_names
+  def visit(node)
+    class_proxy = @file_proxy.class_proxy(node:)
+    class_proxy.method_calls << node
 
-      @method_calls = []
+    if node.name == :private && node.respond_to?(:start_line) && class_proxy.start_line && class_proxy.end_line
+      if node.start_line > class_proxy.start_line && node.start_line < class_proxy.end_line
+        class_proxy.private_start_line = node.start_line 
+      end
     end
 
-    def visit_call_node(node)
-      @method_calls << node if @method_names.include?(node.name)
-
-      super # Continue walking the tree.
-    end
   end
 end
