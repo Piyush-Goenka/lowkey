@@ -27,7 +27,7 @@ module Lowkey
     end
 
     def clear
-      files = {}
+      files.clear
     end
   end
 end

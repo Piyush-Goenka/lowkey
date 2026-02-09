@@ -6,6 +6,6 @@ class MethodClassVisitor
   end
 
   def visit(node)
-    class_proxy = @file_proxy.class_proxy(node:)
+    @file_proxy.class_proxy(node:)
   end
 end
