@@ -15,7 +15,7 @@ module Lowkey
       keys[key]
     end
 
-    def parse(file_path:)
+    def load(file_path:)
       root_node = Prism.parse_file(file_path).value
       file_proxy = FileProxy.new(path: file_path, root_node:)
 

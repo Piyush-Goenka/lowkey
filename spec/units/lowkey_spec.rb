@@ -6,16 +6,16 @@ require_relative '../../lib/proxies/file_proxy'
 RSpec.describe Lowkey do
   let(:file_path) { 'spec/fixtures/a.rb' }
 
-  describe '.parse' do
-    let(:file_proxy) { Lowkey.parse(file_path:) }
+  describe '.load' do
+    let(:file_proxy) { Lowkey.load(file_path:) }
 
-    it 'parses file' do
+    it 'loads file' do
       expect(file_proxy).to be_an_instance_of(Lowkey::FileProxy)
     end
   end
 
   describe '.[]' do
-    let(:file_proxy) { Lowkey.parse(file_path:) }
+    let(:file_proxy) { Lowkey.load(file_path:) }
 
     it 'maps file path to file proxy' do
       expect(Lowkey['spec/fixtures/a.rb']).to be_an_instance_of(Lowkey::FileProxy)
