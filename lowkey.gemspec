@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ['maediprichard@gmail.com']
 
   spec.summary = 'An API for accessing PRISM metadata easily and efficiently'
-  spec.description = 'PRISM is amazing but we still need to use it responsibly and only parse the AST once, do that with Lowkey'
+  spec.description = 'PRISM is amazing but we need to use it responsibly and only load the AST once, do that with Lowkey!'
   spec.homepage = 'https://github.com/low-rb/lowkey'
   spec.required_ruby_version = '>= 3.3.0'
 
