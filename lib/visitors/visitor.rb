@@ -7,8 +7,8 @@ require_relative 'method_def_visitor'
 module Lowkey
   class Visitor < Prism::Visitor
     def initialize(file_proxy:, parent_map:)
-      @method_call_visitor = MethodCallVisitor.new(file_proxy:)
-      @method_class_visitor = MethodClassVisitor.new(file_proxy:)
+      @method_call_visitor = MethodCallVisitor.new(file_proxy:, parent_map:)
+      @method_class_visitor = MethodClassVisitor.new(file_proxy:, parent_map:)
       @method_def_visitor = MethodDefVisitor.new(file_proxy:, parent_map:)
     end
 

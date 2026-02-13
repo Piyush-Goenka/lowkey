@@ -9,7 +9,7 @@ module Lowkey
       map(root_node)
     end
 
-    def parent(node:)
+    def [](node)
       @parent_map[node]
     end
 

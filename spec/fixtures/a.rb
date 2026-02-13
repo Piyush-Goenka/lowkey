@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class A; end
+module Lowkey
+  class A; end
+end

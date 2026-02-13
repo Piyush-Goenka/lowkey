@@ -4,11 +4,11 @@ require 'forwardable'
 
 module Lowkey
   class ClassProxy
-    attr_reader :class_name, :file_proxy, :start_line, :end_line
+    attr_reader :namespace, :file_proxy, :start_line, :end_line
     attr_accessor :private_start_line, :class_methods, :instance_methods, :method_calls
 
-    def initialize(node:, file_proxy:)
-      @class_name = node.name
+    def initialize(node:, namespace:, file_proxy:)
+      @namespace = namespace
       @file_proxy = file_proxy
 
       @start_line = node.class_keyword_loc.start_line

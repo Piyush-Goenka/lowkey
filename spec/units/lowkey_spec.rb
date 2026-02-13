@@ -13,4 +13,16 @@ RSpec.describe Lowkey do
       expect(file_proxy).to be_an_instance_of(Lowkey::FileProxy)
     end
   end
+
+  describe '.[]' do
+    let(:file_proxy) { Lowkey.parse(file_path:) }
+
+    it 'maps file path to file proxy' do
+      expect(Lowkey['spec/fixtures/a.rb']).to be_an_instance_of(Lowkey::FileProxy)
+    end
+
+    it 'maps namespace to file proxies' do
+      expect(Lowkey['Lowkey::A'].first).to be_an_instance_of(Lowkey::FileProxy)
+    end
+  end
 end

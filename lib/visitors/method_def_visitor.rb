@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class MethodDefVisitor
+  attr_reader :parent_map
+
   def initialize(file_proxy:, parent_map:)
     @file_proxy = file_proxy
     @parent_map = parent_map
   end
 
   def visit(node)
-    class_proxy = @file_proxy.class_proxy(node:)
+    class_proxy = @file_proxy.class_proxy(node:, parent_map:)
 
     if class_proxy.class_method?(node:, parent_map:)
       class_proxy.class_methods[node.name] = node

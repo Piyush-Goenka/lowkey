@@ -7,8 +7,12 @@ require_relative 'proxies/file_proxy'
 
 module Lowkey
   class << self
-    def files
-      @files ||= {}
+    def keys
+      @keys ||= {}
+    end
+
+    def [](key)
+      keys[key]
     end
 
     def parse(file_path:)
@@ -19,15 +23,27 @@ module Lowkey
       visitor = Visitor.new(file_proxy:, parent_map:)
       root_node.accept(visitor)
 
-      files[file_path] = file_proxy
-    end
+      map_file_path(file_proxy:)
+      map_definitions(file_proxy:)
 
-    def [](file_path)
-      files[file_path]
+      file_proxy
     end
 
     def clear
-      files.clear
+      keys.clear
+    end
+
+    private
+
+    def map_file_path(file_proxy:)
+      keys[file_proxy.path] = file_proxy
+    end
+
+    def map_definitions(file_proxy:)
+      file_proxy.definitions.each_key do |namespace|
+        keys[namespace] ||= []
+        keys[namespace] << file_proxy
+      end
     end
   end
 end
