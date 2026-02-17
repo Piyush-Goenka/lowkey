@@ -11,7 +11,8 @@ module Lowkey
       @file_proxy = file_proxy
 
       @start_line = node.respond_to?(:class_keyword_loc) ? node.class_keyword_loc.start_line : 0
-      @end_line = node.respond_to?(:end_keyword_loc) ? node.end_keyword_loc.end_line : 0
+      @end_line = node.respond_to?(:end_keyword_loc) ? node.end_keyword_loc.end_line : @start_line
+      @end_line = file_proxy.end_line if namespace == 'Object'
       @private_start_line = nil
 
       @class_methods = {}
