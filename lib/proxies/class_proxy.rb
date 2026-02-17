@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-
 module Lowkey
   class ClassProxy
-    attr_reader :namespace, :file_proxy, :start_line, :end_line
+    attr_reader :namespace, :start_line, :end_line
     attr_writer :method_calls
     attr_accessor :private_start_line, :class_methods, :instance_methods
 
@@ -25,6 +23,10 @@ module Lowkey
       return @method_calls if method_names.nil?
 
       @method_calls.filter { |method_call| method_names.include?(method_call.name) }
+    end
+
+    def file_path
+      @file_proxy.path
     end
 
     class << self
