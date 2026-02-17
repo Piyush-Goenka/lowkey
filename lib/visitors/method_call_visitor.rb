@@ -10,7 +10,7 @@ module Lowkey
     end
 
     def visit(node)
-      class_proxy = @file_proxy.class_proxy(node:, parent_map:)
+      class_proxy = @file_proxy.upsert_class_proxy(node:, parent_map:)
       class_proxy.method_calls << node
 
       return unless node.name == :private && node.respond_to?(:start_line) && class_proxy.start_line && class_proxy.end_line

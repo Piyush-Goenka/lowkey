@@ -10,7 +10,7 @@ module Lowkey
     end
 
     def visit(node)
-      class_proxy = @file_proxy.class_proxy(node:, parent_map:)
+      class_proxy = @file_proxy.upsert_class_proxy(node:, parent_map:)
 
       if ClassProxy.class_method?(node:, parent_map:)
         class_proxy.class_methods[node.name] = node

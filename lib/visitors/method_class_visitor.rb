@@ -10,7 +10,7 @@ module Lowkey
     end
 
     def visit(node)
-      @file_proxy.class_proxy(node:, parent_map:)
+      @file_proxy.upsert_class_proxy(node:, parent_map:)
     end
   end
 end
