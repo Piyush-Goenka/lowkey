@@ -3,7 +3,7 @@
 require_relative 'methods'
 
 module Lowkey
-  class A
+  class ExtendModule
     extend Methods
 
     method_one

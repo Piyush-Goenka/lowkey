@@ -4,7 +4,7 @@ require_relative '../../lib/lowkey'
 require_relative '../../lib/proxies/file_proxy'
 
 RSpec.describe Lowkey do
-  let(:file_path) { 'spec/fixtures/a.rb' }
+  let(:file_path) { 'spec/fixtures/extend_module.rb' }
 
   after do
     Lowkey.clear
@@ -19,7 +19,7 @@ RSpec.describe Lowkey do
 
     it 'caches file proxy' do
       file_proxy
-      expect(Lowkey['spec/fixtures/a.rb']).to be_an_instance_of(Lowkey::FileProxy)
+      expect(Lowkey['spec/fixtures/extend_module.rb']).to be_an_instance_of(Lowkey::FileProxy)
     end
 
     context 'without caching' do
@@ -32,7 +32,7 @@ RSpec.describe Lowkey do
       end
 
       it 'does not cache file proxy' do
-        expect(Lowkey['spec/fixtures/a.rb']).to be_nil
+        expect(Lowkey['spec/fixtures/extend_module.rb']).to be_nil
       end
     end
   end
@@ -43,11 +43,11 @@ RSpec.describe Lowkey do
     end
 
     it 'maps file path to file proxy' do
-      expect(Lowkey['spec/fixtures/a.rb']).to be_an_instance_of(Lowkey::FileProxy)
+      expect(Lowkey['spec/fixtures/extend_module.rb']).to be_an_instance_of(Lowkey::FileProxy)
     end
 
     it 'maps namespace to file proxies' do
-      expect(Lowkey['Lowkey::A'].first).to be_an_instance_of(Lowkey::FileProxy)
+      expect(Lowkey['Lowkey::ExtendModule'].first).to be_an_instance_of(Lowkey::FileProxy)
     end
   end
 end

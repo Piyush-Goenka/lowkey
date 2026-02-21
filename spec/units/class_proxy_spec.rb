@@ -12,7 +12,7 @@ class MockNode
 end
 
 RSpec.describe Lowkey::ClassProxy do
-  subject(:class_proxy) { described_class.new(node: nil, namespace: 'Lowkey::A', file_proxy: nil) }
+  subject(:class_proxy) { described_class.new(node: nil, namespace: 'Lowkey::MockClass', file_proxy: nil) }
 
   before do
     Lowkey.configure { |config| config.cache = true }
