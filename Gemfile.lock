@@ -1,4 +1,9 @@
 PATH
+  remote: ../expressions
+  specs:
+    expressions (0.1.0)
+
+PATH
   remote: .
   specs:
     lowkey (0.2.1)
@@ -68,6 +73,7 @@ PLATFORMS
   x86_64-darwin-22
 
 DEPENDENCIES
+  expressions!
   lowkey!
   pry
   pry-nav
