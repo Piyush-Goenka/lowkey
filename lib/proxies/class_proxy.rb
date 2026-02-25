@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
+require_relative '../queries/query'
+
 module Lowkey
   class ClassProxy
+    include Query
+
     attr_reader :namespace, :start_line, :end_line
     attr_writer :method_calls
-    attr_accessor :private_start_line, :class_methods, :instance_methods
+    attr_accessor :private_start_line, :methods, :class_methods, :instance_methods
 
     def initialize(node:, namespace:, file_proxy:)
+      @node = node
       @namespace = namespace
       @file_proxy = file_proxy
 
@@ -15,9 +20,15 @@ module Lowkey
       @end_line = file_proxy.end_line if namespace == 'Object'
       @private_start_line = nil
 
+      @methods = {}
       @class_methods = {}
       @instance_methods = {}
+
       @method_calls = []
+    end
+
+    def [](key)
+      key.start_with?('.') ? query(node: @node, namespace: nil, name: key.delete_prefix('.')) : @methods[key]
     end
 
     def method_calls(method_names = nil)

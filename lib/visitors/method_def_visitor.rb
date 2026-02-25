@@ -20,6 +20,8 @@ module Lowkey
       return_proxy = ProxyFactory.return_proxy(name:, method_node:, file_path:, scope:)
       method_proxy = MethodProxy.new(file_path:, start_line: method_node.start_line, scope:, name:, param_proxies:, return_proxy:)
 
+      class_proxy.methods[method_node.name] = method_proxy
+
       if ClassProxy.class_method?(method_node:, parent_map:)
         class_proxy.class_methods[method_node.name] = method_proxy
       else

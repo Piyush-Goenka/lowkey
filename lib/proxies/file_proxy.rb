@@ -2,9 +2,12 @@
 
 require_relative '../maps/parent_map'
 require_relative '../proxies/class_proxy'
+require_relative '../queries/query'
 
 module Lowkey
   class FileProxy
+    include Query
+
     attr_reader :path, :start_line, :end_line
     attr_accessor :definitions, :dependencies
 
@@ -21,10 +24,11 @@ module Lowkey
 
     def [](keypath)
       namespace, *path = keypath.split('.')
-      path.empty? ? @definitions[namespace] : query(namespace:, name: path.join) 
+      path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: path.join) 
     end
 
     def []=(keypath, value)
+      # Slice the lines in a file and replace with the output of the class proxy.
       binding.pry
     end
 
@@ -35,13 +39,6 @@ module Lowkey
     end
 
     private
-
-    # TODO: Make name a keypath.
-    def query(namespace:, name:)
-      @root_node.breadth_first_search do |node|
-        node.respond_to?(:name) && node.name == name.to_sym
-      end
-    end
 
     def namespace(node:, parent_map:, namespace: [])
       return namespace if parent_map[node].nil?
