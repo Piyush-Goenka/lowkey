@@ -2,19 +2,34 @@
 
 require_relative '../maps/parent_map'
 require_relative '../proxies/class_proxy'
+require_relative '../queries/query'
 
 module Lowkey
   class FileProxy
+    include Query
+
     attr_reader :path, :start_line, :end_line
     attr_accessor :definitions, :dependencies
 
     def initialize(path:, root_node:)
       @path = path
+      @root_node = root_node
+
       @start_line = 0
       @end_line = root_node.respond_to?(:end_line) ? root_node.end_line : nil
 
       @definitions = {}
       @dependencies = []
+    end
+
+    def [](keypath)
+      namespace, *path = keypath.split('.')
+      path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: path.join) 
+    end
+
+    def []=(keypath, value)
+      # Slice the lines in a file and replace with the output of the class proxy.
+      binding.pry
     end
 
     def upsert_class_proxy(node:, parent_map:)

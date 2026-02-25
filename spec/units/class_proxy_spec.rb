@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/lowkey'
+require 'prism'
 require_relative '../../lib/proxies/class_proxy'
 
-class MockNode
+class MockCallNode
   attr_reader :name
 
   def initialize(name)
@@ -12,23 +12,37 @@ class MockNode
 end
 
 RSpec.describe Lowkey::ClassProxy do
-  subject(:class_proxy) { described_class.new(node: nil, namespace: 'Lowkey::A', file_proxy: nil) }
+  subject(:class_proxy) { described_class.new(node:, namespace: 'Lowkey::MockClass', file_proxy: nil) }
 
-  before do
-    Lowkey.configure { |config| config.cache = true }
+  let(:node) do
+    root_node = Prism.parse_file('spec/fixtures/mock_node.rb').value
+    root_node.breadth_first_search { |n| n.class == Prism::ClassNode }
   end
 
-  after do
-    Lowkey.clear
+  describe '.[]' do
+    context 'with method proxy' do
+      before do
+        method_proxy = Lowkey::MethodProxy.new(file_path: 'mock/path', start_line: 123, scope: 'mock scope', name: 'mock name')
+        class_proxy.methods[:render] = method_proxy
+      end
+
+      it 'returns a method proxy' do
+        expect(class_proxy[:render]).to be_an_instance_of(Lowkey::MethodProxy)
+      end
+
+      it 'returns a method node' do
+        expect(class_proxy['.render']).to be_an_instance_of(Prism::DefNode)
+      end
+    end
   end
 
   describe '#method_calls' do
     before do
       class_proxy.method_calls = [
-        MockNode.new(:get),
-        MockNode.new(:get),
-        MockNode.new(:post),
-        MockNode.new(:delete)
+        MockCallNode.new(:get),
+        MockCallNode.new(:get),
+        MockCallNode.new(:post),
+        MockCallNode.new(:delete)
       ]
     end
 
