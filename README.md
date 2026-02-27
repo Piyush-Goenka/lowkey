@@ -29,9 +29,9 @@ Proxies provide a "flat" abstraction over the Abstract Syntax Tree.
 **Proxy Types:**
 - `FileProxy` - The file path, its definitions and dependencies
 - `ClassProxy` - The class and its methods
-- `MethodProxy` [UNRELEASED]
-- `ParamProxy` [UNRELEASED]
-- `ReturnProxy` [UNRELEASED]
+- `MethodProxy` - A method and its parameters
+- `ParamProxy` - A parameter and its type
+- `ReturnProxy` - The return type of the method
 
 ### Method access
 
