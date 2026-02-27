@@ -11,7 +11,7 @@ module Lowkey
       @parent_map = parent_map
     end
 
-    def visit(method_node)
+    def visit(method_node) # rubocop:disable Metrics/AbcSize
       class_proxy = @file_proxy.upsert_class_proxy(node: method_node, parent_map:)
       name = method_node.name
       scope = name
@@ -22,6 +22,7 @@ module Lowkey
 
       class_proxy.methods[method_node.name] = method_proxy
 
+      # TODO: Implemented as sorted methods similar to sorted params.
       if ClassProxy.class_method?(method_node:, parent_map:)
         class_proxy.class_methods[method_node.name] = method_proxy
       else

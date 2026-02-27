@@ -16,7 +16,7 @@ module Lowkey
           Prism::RequiredParameterNode => :pos_req,
           Prism::OptionalParameterNode => :pos_opt,
           Prism::RequiredKeywordParameterNode => :key_req,
-          Prism::OptionalKeywordParameterNode => :key_opt,
+          Prism::OptionalKeywordParameterNode => :key_opt
         }
 
         params = [*parameters_node.requireds, *parameters_node.optionals, *parameters_node.keywords]
@@ -26,7 +26,7 @@ module Lowkey
           scope = name
           start_line = param.start_line
 
-          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position: nil)
+          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position:)
         end
       end
 

@@ -24,12 +24,11 @@ module Lowkey
 
     def [](keypath)
       namespace, *path = keypath.split('.')
-      path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: path.join) 
+      path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: path.join)
     end
 
     def []=(keypath, value)
-      # Slice the lines in a file and replace with the output of the class proxy.
-      binding.pry
+      # TODO: Slice the lines in a file and replace with the output of the class proxy.
     end
 
     def upsert_class_proxy(node:, parent_map:)
