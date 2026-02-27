@@ -16,7 +16,7 @@ RSpec.describe Lowkey::ClassProxy do
 
   let(:node) do
     root_node = Prism.parse_file('spec/fixtures/mock_node.rb').value
-    root_node.breadth_first_search { |n| n.class == Prism::ClassNode }
+    root_node.breadth_first_search { |n| n.instance_of?(Prism::ClassNode) }
   end
 
   describe '.[]' do

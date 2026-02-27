@@ -9,14 +9,29 @@ require_relative '../proxies/return_proxy'
 module Lowkey
   class ProxyFactory
     class << self
-      def param_proxies(method_node:, file_path:, scope:)
-        return [] if method_node.parameters.nil?
+      def param_proxies(parameters_node:, file_path:, scope:)
+        return [] if parameters_node.nil?
 
-        # ParamProxy.new(expression:, name:, type:, file_path:, start_line:, scope:, position:)
+        param_types = {
+          Prism::RequiredParameterNode => :pos_req,
+          Prism::OptionalParameterNode => :pos_opt,
+          Prism::RequiredKeywordParameterNode => :key_req,
+          Prism::OptionalKeywordParameterNode => :key_opt
+        }
+
+        params = [*parameters_node.requireds, *parameters_node.optionals, *parameters_node.keywords]
+        params.map.with_index do |param, position|
+          type = param_types[param.class]
+          name = param.name
+          scope = name
+          start_line = param.start_line
+
+          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position:)
+        end
       end
 
       def return_proxy(method_node:, name:, file_path:, scope:)
-        return_node = return_node(method_node:)
+        return_node = find_return_node(method_node:)
         return nil if return_node.nil?
 
         start_line = method_node.start_line
@@ -26,8 +41,8 @@ module Lowkey
 
       private
 
-      # Only an unassigned lambda defined immediately after a method's parameters/block is considered a return type.
-      def return_node(method_node:)
+      # A return type is an unassigned lambda defined immediately after a method's parameters/block.
+      def find_return_node(method_node:)
         # Method statements.
         statements_node = method_node.compact_child_nodes.find { |node| node.is_a?(Prism::StatementsNode) }
 
@@ -43,24 +58,6 @@ module Lowkey
         return node if node.is_a?(Prism::LambdaNode)
 
         nil
-      end
-
-      def required_args(ruby_method:)
-        required_args = []
-        required_kwargs = {}
-
-        ruby_method.parameters.each do |param|
-          param_type, param_name = param
-
-          case param_type
-          when :req
-            required_args << nil
-          when :keyreq
-            required_kwargs[param_name] = nil
-          end
-        end
-
-        [required_args, required_kwargs]
       end
     end
   end
