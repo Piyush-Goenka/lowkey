@@ -16,7 +16,7 @@ module Lowkey
       name = method_node.name
       scope = name
 
-      param_proxies = ProxyFactory.param_proxies(method_node:, file_path:, scope:)
+      param_proxies = ProxyFactory.param_proxies(parameters_node: method_node.parameters, file_path:, scope:)
       return_proxy = ProxyFactory.return_proxy(name:, method_node:, file_path:, scope:)
       method_proxy = MethodProxy.new(file_path:, start_line: method_node.start_line, scope:, name:, param_proxies:, return_proxy:)
 
