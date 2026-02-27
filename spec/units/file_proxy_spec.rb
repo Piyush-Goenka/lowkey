@@ -7,6 +7,7 @@ require_relative '../../lib/proxies/class_proxy'
 require_relative '../../lib/proxies/file_proxy'
 require_relative '../../lib/proxies/method_proxy'
 require_relative '../../lib/proxies/param_proxy'
+require_relative '../../lib/proxies/return_proxy'
 
 RSpec.describe Lowkey::FileProxy do
   subject(:file_proxy) { Lowkey.load(file_path: 'spec/fixtures/mock_node.rb') }
@@ -22,6 +23,10 @@ RSpec.describe Lowkey::FileProxy do
 
     it 'returns a param proxy' do
       expect(file_proxy['Lowkey::MockNode'][:render][:one]).to be_an_instance_of(Lowkey::ParamProxy)
+    end
+
+    it 'returns a return proxy' do
+      expect(file_proxy['Lowkey::MockNode'][:render].return_proxy).to be_an_instance_of(Lowkey::ReturnProxy)
     end
 
     it 'returns a method node' do
