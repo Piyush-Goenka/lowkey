@@ -30,7 +30,7 @@ module Lowkey
     end
 
     def expressions?
-      @params.any?(&:expression)
+      @params.any?(&:expression) || @return_proxy
     end
 
     private
