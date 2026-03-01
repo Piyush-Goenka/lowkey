@@ -25,8 +25,9 @@ module Lowkey
           name = param.name
           scope = name
           start_line = param.start_line
+          default_value = param.respond_to?(:value) ? param.value.slice : nil
 
-          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position:)
+          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position:, default_value:)
         end
       end
 
@@ -34,9 +35,10 @@ module Lowkey
         return_node = find_return_node(method_node:)
         return nil if return_node.nil?
 
-        start_line = method_node.start_line
+        start_line = return_node.start_line
+        value = return_node.body.slice
 
-        ReturnProxy.new(name:, file_path:, start_line:, scope:)
+        ReturnProxy.new(name:, file_path:, start_line:, scope:, value:)
       end
 
       private
