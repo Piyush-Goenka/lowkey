@@ -46,20 +46,10 @@ RSpec.describe Lowkey::ClassProxy do
       ]
     end
 
-    context 'without arg' do
-      subject(:method_calls) { class_proxy.method_calls }
+    subject(:method_calls) { class_proxy.method_calls }
 
-      it 'returns all method calls' do
-        expect(method_calls.count).to eq(4)
-      end
-    end
-
-    context 'with arg' do
-      subject(:method_calls) { class_proxy.method_calls(%i[post delete]) }
-
-      it 'returns filtered method calls' do
-        expect(method_calls.count).to eq(2)
-      end
+    it 'returns all method calls' do
+      expect(method_calls.count).to eq(4)
     end
   end
 end

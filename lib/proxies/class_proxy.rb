@@ -30,12 +30,6 @@ module Lowkey
       key.start_with?('.') ? query(node: @node, namespace: nil, name: key.delete_prefix('.')) : @keyed_methods[key]
     end
 
-    def method_calls(method_names = nil)
-      return @method_calls if method_names.nil?
-
-      @method_calls.filter { |method_call| method_names.include?(method_call.name) }
-    end
-
     def file_path
       @file_proxy.path
     end
