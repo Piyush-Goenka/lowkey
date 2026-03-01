@@ -19,9 +19,8 @@ module Lowkey
       @expression = nil
     end
 
-    # TODO. Use PRISM.
     def required?
-      @expression.required?
+      @default_value.nil?
     end
   end
 end
