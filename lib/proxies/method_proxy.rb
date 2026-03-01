@@ -29,6 +29,10 @@ module Lowkey
       @sorted_params[sorting]
     end
 
+    def expressions?
+      @params.any?(&:expression)
+    end
+
     private
 
     def name_params
