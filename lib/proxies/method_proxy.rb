@@ -33,6 +33,10 @@ module Lowkey
       @params.any?(&:expression) || @return_proxy
     end
 
+    def params_with_expressions
+      @params_with_expressions ||= @params.filter(&:expression)
+    end
+
     private
 
     def name_params
