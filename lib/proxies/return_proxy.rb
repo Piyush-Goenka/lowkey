@@ -7,13 +7,12 @@ module Lowkey
     attr_reader :name, :value
     attr_accessor :expression
 
-    def initialize(file_path:, start_line:, scope:, name:, value:)
+    def initialize(file_path:, start_line:, scope:, name:, value: :LOWKEY_UNDEFINED, expression: nil)
       super(file_path:, start_line:, scope:)
 
       @name = name
       @value = value
-
-      @expression = nil
+      @expression = expression
     end
   end
 end
