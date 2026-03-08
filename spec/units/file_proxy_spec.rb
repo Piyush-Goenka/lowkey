@@ -10,7 +10,7 @@ require_relative '../../lib/proxies/param_proxy'
 require_relative '../../lib/proxies/return_proxy'
 
 RSpec.describe Lowkey::FileProxy do
-  subject(:file_proxy) { Lowkey.load(file_path: 'spec/fixtures/mock_node.rb') }
+  subject(:file_proxy) { Lowkey.load('spec/fixtures/mock_node.rb') }
 
   describe '.[]' do
     it 'returns a class proxy' do

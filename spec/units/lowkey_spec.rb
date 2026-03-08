@@ -11,7 +11,7 @@ RSpec.describe Lowkey do
   end
 
   describe '.load' do
-    let(:file_proxy) { Lowkey.load(file_path:) }
+    let(:file_proxy) { Lowkey.load(file_path) }
 
     it 'returns file proxy' do
       expect(file_proxy).to be_an_instance_of(Lowkey::FileProxy)
@@ -39,7 +39,7 @@ RSpec.describe Lowkey do
 
   describe '.[]' do
     before do
-      Lowkey.load(file_path:)
+      Lowkey.load(file_path)
     end
 
     it 'maps file path to file proxy' do
