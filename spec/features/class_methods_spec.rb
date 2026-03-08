@@ -5,7 +5,7 @@ require_relative '../fixtures/class_methods'
 RSpec.describe Lowkey::ClassMethods do
   subject(:class_methods) { file_proxy.definitions['Lowkey::ClassMethods'] }
 
-  let(:file_proxy) { Lowkey.load(file_path: 'spec/fixtures/class_methods.rb') }
+  let(:file_proxy) { Lowkey.load('spec/fixtures/class_methods.rb') }
 
   it 'has inline class method' do
     expect(class_methods[:inline_class_method]).not_to be_nil

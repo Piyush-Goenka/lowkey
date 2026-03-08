@@ -13,7 +13,8 @@ Lowkey provides a central API for storing this metadata once and accessing it mu
 
 Load a file:
 ```ruby
-Lowkey.load(file_path: 'my_class.rb')
+# Absolute path or path relative to the starting Ruby process.
+Lowkey.load('my_class.rb')
 ```
 
 Access the resulting proxies:
