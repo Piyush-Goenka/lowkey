@@ -7,13 +7,11 @@ module Lowkey
   class MethodProxy < Proxy
     include Query
 
-    attr_reader :file_path, :start_line, :scope, :name, :params, :return_proxy
+    attr_reader :params, :return_proxy
 
-    # TODO: Refactor file path, start line and scope into "scope" model.
-    def initialize(file_path:, start_line:, scope:, name:, param_proxies: [], return_proxy: nil) # rubocop:disable Metrics/ParameterLists
-      super(file_path:, start_line:, scope:)
+    def initialize(name:, scope:, param_proxies: [], return_proxy: nil)
+      super(name:, scope:)
 
-      @name = name
       @params = param_proxies
       @named_params = name_params
       @tagged_params = tag_params

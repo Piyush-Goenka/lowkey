@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../factories/scope_factory'
+require_relative '../proxies/class_proxy'
 require_relative '../proxies/method_proxy'
 require_relative '../proxies/param_proxy'
 require_relative '../proxies/return_proxy'
@@ -7,6 +9,12 @@ require_relative '../proxies/return_proxy'
 module Lowkey
   class ProxyFactory
     class << self
+      def class_proxy(node:, namespace:, file_path:)
+        scope = ScopeFactory.class_scope(node:, namespace:, file_path:)
+        name = node.respond_to?(:name) ? node.name : 'Object'
+        ClassProxy.new(node:, name:, namespace:, scope:)
+      end
+
       def param_proxies(parameters_node:, file_path:, scope:)
         return [] if parameters_node.nil?
 
@@ -25,18 +33,18 @@ module Lowkey
           start_line = param.start_line
           value = param.respond_to?(:value) ? param.value.slice : ':LOWKEY_UNDEFINED'
 
-          ParamProxy.new(file_path:, start_line:, scope:, name:, type:, position:, value:)
+          ParamProxy.new(name:, scope:, type:, position:, value:)
         end
       end
 
-      def return_proxy(method_node:, name:, file_path:, scope:)
+      def return_proxy(method_node:, name:, scope:)
         return_node = find_return_node(method_node:)
         return nil if return_node.nil?
 
         start_line = return_node.start_line
         value = return_node.body.slice
 
-        ReturnProxy.new(name:, file_path:, start_line:, scope:, value:)
+        ReturnProxy.new(name:, scope:, value:)
       end
 
       private
