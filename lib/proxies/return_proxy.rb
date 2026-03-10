@@ -7,8 +7,8 @@ module Lowkey
     attr_reader :value
     attr_accessor :expression
 
-    def initialize(name:, scope:, value: :LOWKEY_UNDEFINED, expression: nil)
-      super(name:, scope:)
+    def initialize(name:, source:, value: :LOWKEY_UNDEFINED, expression: nil)
+      super(name:, source:)
 
       @value = value
       @expression = expression

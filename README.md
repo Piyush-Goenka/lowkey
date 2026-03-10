@@ -143,14 +143,14 @@ sequenceDiagram
   participant FileProxy
   participant ClassProxy@{ "type" : "collections" }
   participant Proxies@{ "type" : "collections" }
-  participant Scopes@{ "type" : "collections" }
+  participant Sources@{ "type" : "collections" }
 
   Lowkey->>FileProxy: Parses AST
   FileProxy->>ClassProxy: Manages
   ClassProxy->>Proxies: Manages
-  Scopes->>Proxies: Per proxy
-  Scopes--)FileProxy: References source code
-  Lowkey->>Lowkey: Stores proxies by key
+  Sources->>Proxies: Per proxy
+  Sources--)FileProxy: Mutates source code
+  Lowkey->>Lowkey: Stores proxies
 ```
 
 ## Installation

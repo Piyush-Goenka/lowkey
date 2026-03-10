@@ -7,8 +7,8 @@ module Lowkey
     attr_reader :type, :position, :value
     attr_accessor :expression
 
-    def initialize(name:, scope:, type:, position: nil, value: :LOWKEY_UNDEFINED, expression: nil) # rubocop:disable Metrics/ParameterLists
-      super(name:, scope:)
+    def initialize(name:, source:, type:, position: nil, value: :LOWKEY_UNDEFINED, expression: nil) # rubocop:disable Metrics/ParameterLists
+      super(name:, source:)
 
       @type = type
       @position = position

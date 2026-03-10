@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../factories/scope_factory'
+require_relative '../factories/source_factory'
 require_relative '../proxies/class_proxy'
 require_relative '../proxies/file_proxy'
 require_relative '../proxies/method_proxy'
@@ -11,17 +11,17 @@ module Lowkey
   class ProxyFactory
     class << self
       def file_proxy(root_node:, file_path:)
-        scope = ScopeFactory.file_scope(root_node:, file_path:)
-        FileProxy.new(root_node:, scope:)
+        source = SourceFactory.file_source(root_node:, file_path:)
+        FileProxy.new(root_node:, source:)
       end
 
       def class_proxy(node:, namespace:, file_path:, lines:)
-        scope = ScopeFactory.class_scope(node:, namespace:, file_path:, lines:)
+        source = SourceFactory.class_source(node:, namespace:, file_path:, lines:)
         name = node.respond_to?(:name) ? node.name : 'Object'
-        ClassProxy.new(node:, name:, namespace:, scope:)
+        ClassProxy.new(node:, name:, namespace:, source:)
       end
 
-      def param_proxies(parameters_node:, scope:, file_path:)
+      def param_proxies(parameters_node:, source:, file_path:)
         return [] if parameters_node.nil?
 
         param_types = {
@@ -34,22 +34,22 @@ module Lowkey
         params = [*parameters_node.requireds, *parameters_node.optionals, *parameters_node.keywords]
         params.map.with_index do |param, position|
           name = param.name
-          scope = ScopeFactory.param_scope(param_node: param, file_path:, lines: scope.lines)
+          source = SourceFactory.param_source(param_node: param, file_path:, lines: source.lines)
           type = param_types[param.class]
           value = param.respond_to?(:value) ? param.value.slice : ':LOWKEY_UNDEFINED'
 
-          ParamProxy.new(name:, scope:, type:, position:, value:)
+          ParamProxy.new(name:, source:, type:, position:, value:)
         end
       end
 
-      def return_proxy(method_node:, name:, scope:)
+      def return_proxy(method_node:, name:, source:)
         return_node = find_return_node(method_node:)
         return nil if return_node.nil?
 
         start_line = return_node.start_line
         value = return_node.body.slice
 
-        ReturnProxy.new(name:, scope:, value:)
+        ReturnProxy.new(name:, source:, value:)
       end
 
       private

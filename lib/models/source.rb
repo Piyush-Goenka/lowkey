@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Lowkey
-  class Scope
+  class Source
     attr_reader :file_path, :scope
     attr_accessor :lines, :start_line, :end_line
 

@@ -11,8 +11,8 @@ module Lowkey
     attr_reader :root_node
     attr_accessor :lines, :definitions, :dependencies
 
-    def initialize(root_node:, scope:)
-      super(name: nil, scope:)
+    def initialize(root_node:, source:)
+      super(name: nil, source:)
 
       @root_node = root_node
 

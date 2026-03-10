@@ -10,8 +10,8 @@ module Lowkey
     attr_reader :namespace
     attr_accessor :private_start_line, :keyed_methods, :class_methods, :instance_methods, :method_calls
 
-    def initialize(node:, name:, namespace:, scope:)
-      super(name:, scope:)
+    def initialize(node:, name:, namespace:, source:)
+      super(name:, source:)
 
       @node = node
       @namespace = namespace

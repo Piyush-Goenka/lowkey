@@ -9,8 +9,8 @@ module Lowkey
 
     attr_reader :params, :return_proxy
 
-    def initialize(name:, scope:, param_proxies: [], return_proxy: nil)
-      super(name:, scope:)
+    def initialize(name:, source:, param_proxies: [], return_proxy: nil)
+      super(name:, source:)
 
       @params = param_proxies
       @named_params = name_params
