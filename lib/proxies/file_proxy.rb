@@ -1,50 +1,37 @@
 # frozen_string_literal: true
 
-require_relative '../maps/parent_map'
+require_relative '../interfaces/proxy'
 require_relative '../proxies/class_proxy'
 require_relative '../queries/query'
 
 module Lowkey
-  class FileProxy
+  class FileProxy < Proxy
     include Query
 
-    attr_reader :path, :start_line, :end_line
+    attr_reader :root_node
     attr_accessor :definitions, :dependencies
 
-    def initialize(path:, root_node:)
-      @path = path
-      @root_node = root_node
+    def initialize(root_node:, source:)
+      super(name: nil, source:)
 
-      @start_line = 0
-      @end_line = root_node.respond_to?(:end_line) ? root_node.end_line : nil
+      @root_node = root_node
 
       @definitions = {}
       @dependencies = []
     end
 
     def [](keypath)
-      namespace, *path = keypath.split('.')
-      path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: path.join)
+      namespace, *file_path = keypath.split('.')
+      file_path.empty? ? @definitions[namespace] : query(node: @root_node, namespace:, name: file_path.join)
     end
 
     def []=(keypath, value)
       # TODO: Slice the lines in a file and replace with the output of the class proxy.
     end
 
-    def upsert_class_proxy(node:, parent_map:)
-      namespace = namespace(node:, parent_map:).reverse.join('::')
-      namespace = 'Object' if namespace.empty?
-      @definitions[namespace] ||= ClassProxy.new(node:, namespace:, file_proxy: self)
-    end
-
-    private
-
-    def namespace(node:, parent_map:, namespace: [])
-      return namespace if parent_map[node].nil?
-
-      namespace << node.constant_path.name.to_s if node.respond_to?(:constant_path)
-
-      namespace(node: parent_map[node], parent_map:, namespace:)
+    def upsert_class_proxy(class_proxy:)
+      # TODO: Merge duplicate class with existing class.
+      @definitions[class_proxy.namespace] ||= class_proxy
     end
   end
 end

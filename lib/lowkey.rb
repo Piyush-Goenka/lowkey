@@ -3,6 +3,8 @@
 require 'prism'
 
 require_relative 'adapters/adapter_loader'
+require_relative 'factories/proxy_factory'
+require_relative 'maps/parent_map'
 require_relative 'visitors/visitor'
 require_relative 'proxies/file_proxy'
 
@@ -18,7 +20,7 @@ module Lowkey
 
     def load(file_path)
       root_node = Prism.parse_file(file_path).value
-      file_proxy = FileProxy.new(path: file_path, root_node:)
+      file_proxy = ProxyFactory.file_proxy(root_node:, file_path:)
 
       parent_map = ParentMap.new(root_node:)
       visitor = Visitor.new(file_proxy:, parent_map:)
@@ -50,11 +52,11 @@ module Lowkey
     private
 
     def map_file_path(file_proxy:)
-      keys[file_proxy.path] = file_proxy
+      keys[file_proxy.file_path] = file_proxy
 
       # Map absolute paths to project root/relative paths.
-      project_path = file_proxy.path.delete_prefix(Dir.pwd).delete_prefix('/')
-      keys[project_path] = file_proxy if project_path != file_proxy.path
+      project_path = file_proxy.file_path.delete_prefix(Dir.pwd).delete_prefix('/')
+      keys[project_path] = file_proxy if project_path != file_proxy.file_path
     end
 
     def map_definitions(file_proxy:)

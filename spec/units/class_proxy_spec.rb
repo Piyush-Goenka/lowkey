@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'prism'
+require_relative '../../lib/models/source'
 require_relative '../../lib/proxies/class_proxy'
 
 class MockCallNode
@@ -12,17 +13,18 @@ class MockCallNode
 end
 
 RSpec.describe Lowkey::ClassProxy do
-  subject(:class_proxy) { described_class.new(node:, namespace: 'Lowkey::MockClass', file_proxy: nil) }
+  subject(:class_proxy) { described_class.new(node:, name: 'MockClass', namespace: 'Lowkey::MockClass', source: nil) }
 
   let(:node) do
-    root_node = Prism.parse_file('spec/fixtures/mock_node.rb').value
+    root_node = Prism.parse_file('spec/fixtures/mock_node.rbx').value
     root_node.breadth_first_search { |n| n.instance_of?(Prism::ClassNode) }
   end
 
   describe '.[]' do
     context 'with method proxy' do
       before do
-        method_proxy = Lowkey::MethodProxy.new(file_path: 'mock/path', start_line: 123, scope: 'mock scope', name: 'mock name')
+        source = Lowkey::Source.new(file_path: 'mock/path', scope: 'mock scope', lines: [], start_line: 123)
+        method_proxy = Lowkey::MethodProxy.new(name: 'mock name', source:)
         class_proxy.keyed_methods[:render] = method_proxy
       end
 

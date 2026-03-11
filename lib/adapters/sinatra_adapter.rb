@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+require_relative '../factories/source_factory'
 require_relative '../interfaces/adapter'
 
 module Lowkey
   class SinatraAdapter < Adapter
-    def initialize(class_proxy:)
+    def initialize(file_proxy:, class_proxy:)
+      @file_proxy = file_proxy
       @class_proxy = class_proxy
-      @file_path = class_proxy.file_path
     end
 
     def load # rubocop:disable Metrics/AbcSize
@@ -20,19 +21,25 @@ module Lowkey
         pattern = arguments_node.arguments.first.content
         route = "#{method_call_node.name.upcase} #{pattern}"
         name = route
-        scope = route
-        start_line = method_call_node.start_line
+        source = SourceFactory.method_call_source(method_call_node:, arguments_node:, file_path:, lines:)
 
-        next unless (return_proxy = ProxyFactory.return_proxy(method_node: method_call_node, name:, file_path:, scope:))
+        next unless (return_proxy = ProxyFactory.return_proxy(method_node: method_call_node, name:, source:))
 
-        param_proxies = [ParamProxy.new(file_path:, start_line:, scope:, name:, type: :pos_req, position: 0)]
+        param_proxies = [ParamProxy.new(source:, name:, type: :pos_req, position: 0)]
+        method_proxy = MethodProxy.new(source:, name:, param_proxies:, return_proxy:)
 
-        @class_proxy.keyed_methods[route] = MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:, return_proxy:)
+        @class_proxy.keyed_methods[route] = method_proxy
       end
     end
 
     private
 
-    attr_reader :file_path
+    def file_path
+      @file_proxy.file_path
+    end
+
+    def lines
+      @file_proxy.lines
+    end
   end
 end

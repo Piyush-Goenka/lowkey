@@ -135,6 +135,24 @@ Lowkey.configure do |config|
 end
 ```
 
+## Architecture
+
+```mermaid
+sequenceDiagram
+  participant Lowkey@{ "type" : "database" }
+  participant FileProxy
+  participant ClassProxy@{ "type" : "collections" }
+  participant Proxies@{ "type" : "collections" }
+  participant Sources@{ "type" : "collections" }
+
+  Lowkey->>FileProxy: Parses AST
+  FileProxy->>ClassProxy: Manages
+  ClassProxy->>Proxies: Manages
+  Sources->>Proxies: Per proxy
+  Sources--)FileProxy: Mutates source code
+  Lowkey->>Lowkey: Stores proxies
+```
+
 ## Installation
 
 Add `gem 'lowkey'` to your Gemfile then:
