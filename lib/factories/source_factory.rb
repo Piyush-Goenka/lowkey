@@ -32,16 +32,37 @@ module Lowkey
       def method_source(method_node:, file_path:, lines:)
         scope = method_node.name
         start_line = method_node.start_line
+        end_line = method_node.end_line
+        end_line = end_line_from_indent(method_node:, lines:) if end_line > lines.count
 
-        Source.new(file_path:, scope:, lines:, start_line:)
+        Source.new(file_path:, scope:, lines:, start_line:, end_line:)
       end
 
       def method_call_source(method_call_node:, arguments_node:, file_path:, lines:)
         pattern = arguments_node.arguments.first.content
         scope = "#{method_call_node.name.upcase} #{pattern}"
         start_line = method_call_node.start_line
+        end_line = method_call_node.end_line
 
-        Source.new(file_path:, scope:, lines:, start_line:)
+        Source.new(file_path:, scope:, lines:, start_line:, end_line:)
+      end
+
+      private
+
+      # TODO: end_line = start_line if it's an endless method like "def method = expression".
+      def end_line_from_indent(method_node:, lines:)
+        end_index = nil
+
+        index = method_node.start_line - 1
+        indent = lines[index].split('def').first
+
+        while end_index.nil?
+          end_index = index if lines[index].nil?
+          end_index = index if lines[index].start_with?("#{indent}end")
+          index += 1
+        end
+
+        end_index + 1
       end
     end
   end
