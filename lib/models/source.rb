@@ -15,7 +15,10 @@ module Lowkey
     end
 
     def wrap(prefix:, suffix:)
-      lines[start_index] = prefix.to_s + lines[start_index]
+      start_line = lines[start_index]
+      indent = start_line[/^\s+/]
+      lines[start_index] = indent + prefix.to_s + start_line.lstrip
+
       lines[end_index] = lines[end_index] + suffix.to_s
     end
 
