@@ -13,13 +13,13 @@ module Lowkey
 
     def visit(node)
       namespace = namespace(node:, parent_map:)
-      class_proxy = @file_proxy[namespace]
-      class_proxy.method_calls << node
+      module_proxy = @file_proxy[namespace]
+      module_proxy.method_calls << node
 
-      return unless node.name == :private && node.respond_to?(:start_line) && class_proxy.start_line && class_proxy.end_line
-      return unless node.start_line > class_proxy.start_line && node.start_line < class_proxy.end_line
+      return unless node.name == :private && node.respond_to?(:start_line) && module_proxy.start_line && module_proxy.end_line
+      return unless node.start_line > module_proxy.start_line && node.start_line < module_proxy.end_line
 
-      class_proxy.private_start_line = node.start_line
+      module_proxy.private_start_line = node.start_line
     end
 
     private
