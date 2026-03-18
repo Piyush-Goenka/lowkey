@@ -24,7 +24,7 @@ module Lowkey
       # TODO: Implemented as tagged methods similar to tagged params.
       if ModuleProxy.class_method?(method_node:, parent_map:)
         module_proxy.class_methods[method_node.name] = method_proxy
-      elsif module_proxy.class < ClassProxy
+      elsif module_proxy.class <= ClassProxy
         module_proxy.instance_methods[method_node.name] = method_proxy
       end
     end
