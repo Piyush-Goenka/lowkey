@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'prism'
+
 module Lowkey
   module Query
     # TODO: Make name a keypath.
@@ -10,6 +12,9 @@ module Lowkey
     end
 
     def namespace(node:, parent_map:, namespace: [])
+      # When inside RBX, Prism thinks we're defining a class because of "<".
+      return nil if node.respond_to?(:constant_path) && node.constant_path.is_a?(Prism::MissingNode)
+
       if parent_map[node].nil?
         namespace << 'Object' if namespace.empty?
         return namespace.reverse.join('::')
