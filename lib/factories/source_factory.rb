@@ -6,13 +6,13 @@ module Lowkey
   class SourceFactory
     class << self
       def file_source(root_node:, file_path:)
-        end_line = root_node.respond_to?(:end_line) ? root_node.end_line : nil
+        end_line = root_node.respond_to?(:end_line) ? root_node.end_line : nil # TODO: Get file line count.
 
-        Source.new(file_path:, scope: 'file', lines: root_node.script_lines, start_line: 0, end_line:)
+        Source.new(file_path:, scope: 'file', lines: root_node.script_lines, start_line: 1, end_line:)
       end
 
       def module_source(node:, namespace:, file_path:, lines:)
-        start_line = node.respond_to?(:class_keyword_loc) ? node.class_keyword_loc.start_line : 0
+        start_line = node.respond_to?(:class_keyword_loc) ? node.class_keyword_loc.start_line : 1
         end_line = node.respond_to?(:end_keyword_loc) ? node.end_keyword_loc.end_line : start_line
         end_line = node.end_line if namespace == 'Object'
         scope = node.respond_to?(:name) ? node.name : 'Object'
@@ -21,7 +21,7 @@ module Lowkey
       end
 
       def class_source(node:, file_path:, lines:)
-        start_line = node.respond_to?(:class_keyword_loc) ? node.class_keyword_loc.start_line : 0
+        start_line = node.respond_to?(:class_keyword_loc) ? node.class_keyword_loc.start_line : 1
         end_line = node.respond_to?(:end_keyword_loc) ? node.end_keyword_loc.end_line : start_line
 
         Source.new(file_path:, scope: node.name, lines:, start_line:, end_line:)
@@ -31,7 +31,8 @@ module Lowkey
         scope = method_node.name
         start_line = method_node.start_line
         end_line = method_node.end_line
-        end_line = end_line_from_indent(method_node:, lines:) if end_line > lines.count
+        # TODO: Brittle conditional. What we really want to identify is if the method/rest of file was able to be parsed into an AST.
+        end_line = end_line_from_indent(method_node:, lines:) if end_line >= lines.count
 
         Source.new(file_path:, scope:, lines:, start_line:, end_line:)
       end

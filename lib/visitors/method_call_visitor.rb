@@ -12,7 +12,7 @@ module Lowkey
     end
 
     def visit(node)
-      namespace = namespace(node:, parent_map:)
+      namespace = namespace(node:, parent_map:) || return
       module_proxy = file_proxy[namespace]
 
       module_proxy.method_calls << node

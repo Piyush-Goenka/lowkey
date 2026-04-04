@@ -13,7 +13,7 @@ module Lowkey
     end
 
     def visit(node)
-      namespace = namespace(node:, parent_map:)
+      namespace = namespace(node:, parent_map:) || return
       class_proxy = ProxyFactory.class_proxy(node:, namespace:, file_path:, lines:)
       @file_proxy.upsert_definition(module_proxy: class_proxy)
     end
