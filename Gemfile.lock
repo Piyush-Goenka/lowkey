@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lowkey (0.4.1)
+    lowkey (0.4.2)
       prism
 
 GEM
