@@ -23,19 +23,19 @@ module Lowkey
 
     def export(typed: true)
       return @source.export if typed
-      return plain_keyword_param if %i[key_req key_opt].include?(@type)
+      return untyped_keyword_param if %i[key_req key_opt].include?(@type)
 
-      plain_positional_param
+      untyped_positional_param
     end
 
     private
 
-    def plain_keyword_param
+    def untyped_keyword_param
       default = resolved_default
       default.nil? ? "#{@name}:" : "#{@name}: #{default}"
     end
 
-    def plain_positional_param
+    def untyped_positional_param
       default = resolved_default
       default.nil? ? @name.to_s : "#{@name} = #{default}"
     end

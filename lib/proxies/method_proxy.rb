@@ -30,17 +30,12 @@ module Lowkey
     end
 
     def rewrite_signature
-      sig_index = start_line - 1
-      original = lines[sig_index]
-      indent = original[/^\s*/]
+      original = lines[start_index]
       scope_prefix = original.match?(/def self\./) ? 'def self.' : 'def '
-      plain_params = params_with_expressions.map { |p| p.export(typed: false) }.join(', ')
-      all_params = @params.map do |p|
-        p.expression ? p.export(typed: false) : p.name.to_s
-      end
-      rebuilt = "#{indent}#{scope_prefix}#{@name}(#{all_params.join(', ')})"
-      rebuilt += original[/\).*$/].delete_prefix(')') if original =~ /\)/
-      lines[sig_index] = "#{rebuilt}\n"
+      all_params = @params.map { |p| p.expression ? p.export(typed: false) : p.name.to_s }
+      sig_lines = ["#{scope_prefix}#{@name}(#{all_params.join(', ')})\n"]
+      indent = original[/^\s*/]
+      lines[start_index] = indent + sig_lines[0].lstrip
     end
 
     def expressions?
