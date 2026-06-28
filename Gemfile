@@ -6,8 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'pry'
-  gem 'pry-nav'
+  gem 'irb'
   gem 'rack'
   gem 'rack-test'
   gem 'rake', '~> 13.0'
