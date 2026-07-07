@@ -30,8 +30,8 @@ module Lowkey
     end
 
     def rewrite_signature
-      original = lines[start_index]
-      scope_prefix = original.match?(/def self\./) ? 'def self.' : 'def '
+      old_line = lines[start_index]
+      scope_prefix = old_line.match?(/def self\./) ? 'def self.' : 'def '
       all_params = @params.map { |p| p.expression ? p.export(typed: false) : p.name.to_s }
       return_suffix = @return_proxy ? " #{@return_proxy.export}" : ''
       self.lines = ["#{scope_prefix}#{@name}(#{all_params.join(', ')})#{return_suffix}\n"]
