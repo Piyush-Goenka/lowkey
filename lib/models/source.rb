@@ -45,7 +45,5 @@ module Lowkey
     def end_index
       end_line - 1
     end
-
-    private
   end
 end
