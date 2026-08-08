@@ -38,8 +38,6 @@ module Lowkey
       lines[start_index..end_index].join
     end
 
-    private
-
     def start_index
       start_line - 1
     end

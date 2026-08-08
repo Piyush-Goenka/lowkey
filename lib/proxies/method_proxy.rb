@@ -29,6 +29,15 @@ module Lowkey
       @tagged_params[tag] || []
     end
 
+    def rewrite_signature
+      old_line = lines[start_index]
+      scope_prefix = old_line.match?(/def self\./) ? 'def self.' : 'def '
+      all_params = @params.map { |p| p.expression ? p.export(typed: false) : p.name.to_s }
+      return_suffix = @return_proxy ? " #{@return_proxy.export}" : ''
+      indent = old_line[/^\s*/]
+      lines[start_index] = "#{indent}#{scope_prefix}#{@name}(#{all_params.join(', ')})#{return_suffix}\n"
+    end
+
     def expressions?
       @params.any?(&:expression) || @return_proxy
     end
