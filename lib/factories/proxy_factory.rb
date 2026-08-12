@@ -57,7 +57,7 @@ module Lowkey
           name = param.name
           source = SourceFactory.param_source(param_node: param, file_path:, lines: source.lines)
           type = param_types[param.class]
-          value = param.respond_to?(:value) ? param.value.slice : ':LOWKEY_UNDEFINED'
+          value = param.respond_to?(:value) ? param.value.slice : :LOWKEY_UNDEFINED
 
           ParamProxy.new(name:, source:, type:, position:, value:)
         end

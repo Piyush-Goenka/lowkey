@@ -18,7 +18,7 @@ module Lowkey
     end
 
     def required?
-      @value == :LOWKEY_UNDEFINED || @value == ':LOWKEY_UNDEFINED'
+      @value == :LOWKEY_UNDEFINED
     end
 
     def export(typed: true)
@@ -51,7 +51,7 @@ module Lowkey
         return value.inspect
       end
 
-      return nil if @value == :LOWKEY_UNDEFINED || @value == ':LOWKEY_UNDEFINED'
+      return nil if @value == :LOWKEY_UNDEFINED
 
       @value
     end
