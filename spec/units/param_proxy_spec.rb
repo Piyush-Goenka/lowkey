@@ -24,7 +24,7 @@ RSpec.describe Lowkey::ParamProxy do
     context 'typed: false with a ValueExpression default' do
       # Simulates a LowType::ValueExpression without requiring LowType to be loaded
       let(:value_expression) do
-        Struct.new(:value) { def class; Struct.new(:name) { }.new('LowType::ValueExpression') end }.new('hello')
+        Struct.new(:value) { def class; Struct.new(:name) { }.new('ValueExpression') end }.new('hello')
       end
 
       let(:mock_expression) do
