@@ -18,7 +18,7 @@ module Lowkey
     end
 
     def required?
-      @value == :LOWKEY_UNDEFINED || @value == ':LOWKEY_UNDEFINED'
+      @value == :LOWKEY_UNDEFINED
     end
 
     def export(typed: true)
@@ -46,12 +46,12 @@ module Lowkey
         return nil if @expression.default_value.nil? && required?
 
         value = @expression.default_value
-        return value.value.inspect if value.is_a?(ValueExpression)
+        return value.value.inspect if value.class.name == 'ValueExpression'
 
         return value.inspect
       end
 
-      return nil if @value == :LOWKEY_UNDEFINED || @value == ':LOWKEY_UNDEFINED'
+      return nil if @value == :LOWKEY_UNDEFINED
 
       @value
     end
