@@ -45,22 +45,22 @@ RSpec.describe Lowkey::ParamProxy do
     end
 
     context 'typed: false with no expression set' do
-      it 'returns plain name for a required positional param' do
+      it 'returns untyped required positional param' do
         param = method_proxy[:one]
         expect(param.export(typed: false)).to eq('one')
       end
 
-      it 'returns plain name for a required keyword param' do
+      it 'returns untyped required keyword param' do
         param = method_proxy[:three]
         expect(param.export(typed: false)).to eq('three:')
       end
 
-      it 'returns name with default for an optional positional param' do
+      it 'returns untyped optional positional param' do
         param = method_proxy[:two]
         expect(param.export(typed: false)).to eq("two = 'mock value'")
       end
 
-      it 'returns name with default for an optional keyword param' do
+      it 'returns untyped optional keyword param' do
         param = method_proxy[:four]
         expect(param.export(typed: false)).to eq("four: 'mock value'")
       end
